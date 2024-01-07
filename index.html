@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <title>scrollFxLK</title>
+
+    <script type="text/javascript" src="./scrollFxLK.js?v=1.1.1"></script>
+    <!--<script type="text/javascript" src="./slickAutoPause.js"></script>-->
+
+    <link rel="stylesheet" type="text/css" href="./assets/fx.css">
+</head>
+
+<body>
+
+
+<dl id="scrfx_list">
+    <dt>이펙트</dt>
+    <dd><a href="#mediaAutoPlay">mediaAutoPlay</a></dd>
+    <dd><a href="#imgLazyLoad">imgLazyLoad</a></dd>
+    <dd><a href="#htmlLazyLoad">htmlLazyLoad</a></dd>
+    <dd><a href="#float">float</a></dd>
+    <dd><a href="#bga">bga</a></dd>
+    <dd><a href="#active">active</a></dd>
+    <dd><a href="#chainActive">chainActive</a></dd>
+    <dd><a href="#counter">counter</a></dd>
+    <dd><a href="#typewrite">typewrite</a></dd>
+    <dd><a href="#marquee">marquee</a></dd>
+    <dd><a href="#bounce">bounce</a></dd>
+    <dd><a href="#paused">paused</a></dd>
+    <dd><a href="#fadeIn">fadeIn</a></dd>
+    <dd><a href="#fadeOut">fadeOut</a></dd>
+    <dt>자세히 보기</dt>
+    <dd><a href="#autoSetting">자동적용</a></dd>
+    <dd><a href="#forceScrFx">강제호출</a></dd>
+    <dd><a href="#helpMode">도움말 모드</a></dd>
+    <dd><a href="#mediaTrySetting">동영상 불러오기 설정</a></dd>
+    <dd><a href="#pageMonitor">페이지 길이 변경 감시</a></dd>
+    <dt>추가 기능</dt>
+    <dd><a href="#slickPause">슬릭 슬라이드 자동 제어</a></dd>
+    <dt style="margin-top: 50px; font-size: 0.8em; color:#888;">이전버전</dt>
+    <dd style="font-size: 0.8em; color:#888;"><a href="/web/scrfx_103/" target="_blank">1.0.3</a></dd>
+</dl>
+
+<div class="contents_wrap">
+
+    <div>
+        <div class="desc">
+            <h1>scrollFxLK.js</h1>
+            <p>
+                스크롤 위치에 따라 다양한 효과를 발생시킵니다.<br>
+                scrollFxLK.js 를 HTML 문서의 가능한 한 최상단에서 호출 합니다.<br>
+                각 이펙트는 <strong style="text-decoration: underline;">window.onLoad</strong> 콜백으로 addScrFxItem('엘리먼트ID','이펙트') 함수를 호출하여 사용할 수 있으며,<br>
+                사용할 수 없는 이펙트를 호출하거나 설정 오류시 다음과 같이 콘솔창에 에러메세지와 함께 짧은 도움말을 출력 합니다.<br>
+            </p>
+        </div>
+        <div class="code">
+            <code>
+                &lt;script type="text/javascript" src="./scrollFxLK.js"&gt;&lt;/script&gt;<br>
+                <br>
+                <strong>window.addEventListener('load',()=>{</strong><br>
+                <em></em>addScrFxItem('엘리먼트ID','이펙트');<br>
+                <strong>});</strong>
+            </code>
+        </div>
+    </div>
+
+    <div id="mediaAutoPlay">
+        <div class="desc">
+            <h2>mediaAutoPlay</h2>
+            <p>
+                태그 안에 지정된 data-service, data-code 값에 따라 youtube 혹은 vimeo 동영상을 불러 옵니다.<br>
+                영상이 화면 밖으로 사라지면 일시정지 시키며, 화면 안으로 들어오면 다시 재생 시키고, 소리를 제어하는 버튼이 생성 됩니다.
+            </p>
+            <ul class="required">
+                <li>data-service <em>youtube 혹은 vimeo</em></li>
+                <li>data-code <em>영상ID : 쉼표(,)로 구분하여 여러 영상ID를 입력하면 랜덤재생 됩니다. 공백 사용 금지</em></li>
+            </ul>
+            <ul class="option">
+                <li>data-lazy="true" <em>설정시 스크롤 위치에 따라 최초로딩 합니다. 페이지의 퍼포먼스가 심히 낮은 경우 사용하세요.</em></li>
+            </ul>
+            <p class="more"><a href="#autoSetting">요소의 class 를 .media_auto_play 로 지정하면 함수를 호출하지 않아도 자동적용 됩니다.</a></p>
+            <p class="more"><a href="#mediaTrySetting">최대 4회 로딩을 시도 합니다.</a></p>
+            <p class="warn">youtube 의 경우 PC로컬에서 페이지 실행 시 정상작동 하지 않습니다.</p>
+        </div>
+        <div class="code">
+            <code class="css">
+                .media_auto_play { width: 800px; height: 450px; }<br>
+                .media_auto_play .controller { width: 50px; height: 50px; bottom: 50px; right: 50px; }
+            </code>
+<div class="html"><textarea readonly>
+<div class="media_auto_play" data-service="youtube" data-code="__NeP0RqACU"></div>
+<div id="media01" data-service="vimeo" data-code="524933864"></div>
+
+<!--랜덤재생:쉼표(,)구분,공백사용금지-->
+<div class="media_auto_play" data-service="vimeo" data-code="662689422,753894027,662689318"></div>
+</textarea></div>
+            <code class="js">
+                addScrFxItem('media01','mediaAutoPlay');
+            </code>
+        </div>
+        <div class="demo">
+            <div class="media_auto_play" data-service="youtube" data-code="__NeP0RqACU,p4oW_rwP7qc"></div>
+            <br>
+            <div id="media01" data-service="vimeo" data-code="524933864"></div>
+            <br>
+            <p>↓ 랜덤재생</p>
+            <div class="media_auto_play" data-service="vimeo" data-code="662689422,753894027,662689318"></div>
+        </div>
+    </div>
+
+    <div id="mediaAutoPlay2">
+        <div class="desc">
+            <h2>mediaAutoPlay (랜덤재생 추가기능)</h2>
+            <p>
+                여러 영상 랜덤재생 기능 사용시, youtube 나 vimeo 양쪽의 서비스 모두에서 랜덤재생을 시키려면 다음의 방법을 사용하세요.<br>
+            </p>
+            <ul class="required">
+                <li>data-service <em>mix</em></li>
+                <li>data-code <em>영상ID : 쉼표(,)로 구분하되 ID 앞쪽에 <strong>Y:</strong> (유튜브) 혹은 <strong>V:</strong> (비메오) 추가</em></li>
+            </ul>
+        </div>
+        <div class="code">
+<div class="html"><textarea readonly>
+<div class="media_auto_play" data-service="mix" data-code="Y:p4oW_rwP7qc,V:753894027"></div>
+</textarea></div>
+        </div>
+        <div class="demo">
+            <div class="media_auto_play" data-service="mix" data-code="Y:thA_T13Wnqo,V:662689296"></div>
+        </div>
+    </div>
+
+    <div id="imgLazyLoad">
+        <div class="desc">
+            <h2>imgLazyLoad</h2>
+            <p>
+                스크롤이 일정 위치에 도달했을 때 태그 안에 지정된 data-url 값에 지정된 경로의 이미지를 불러 옵니다.<br>
+                한 번만 실행 됩니다.<br>
+                용량이 큰 gif 이미지를 불러올 때 유용합니다.
+            </p>
+            <ul class="required">
+                <li>data-url <em>이미지 경로</em></li>
+            </ul>
+            <ul class="option">
+                <li>data-alt <em>alt 속성</em></li>
+            </ul>
+            <p class="more"><a href="#autoSetting">요소의 class 를 .img_lazy_load 로 지정하면 함수를 호출하지 않아도 자동적용 됩니다.</a></p>
+            <p class="more"><a href="#forceScrFx">스크롤 반응 없이 강제실행이 가능합니다.</a></p>
+        </div>
+        <div class="code">
+            <div class="html"><textarea readonly>
+<div class="img_lazy_load" data-url="./assets/img_lazy_load.jpg"></div>
+<div id="ill01" data-url="./assets/ill01.gif" data-alt="GIF 이미지"></div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('ill01','imgLazyLoad');
+            </code>
+        </div>
+        <div class="demo">
+            <div class="img_lazy_load" data-url="./assets/img_lazy_load.jpg"></div>
+            <div id="ill01" data-url="./assets/ill01.gif" data-alt="GIF 이미지"></div>
+        </div>
+    </div>
+
+    <div id="htmlLazyLoad">
+        <div class="desc">
+            <h2>htmlLazyLoad</h2>
+            <p>
+                스크롤이 일정 위치에 도달했을 때<br>
+                태그 안에 지정된 data-url 값에 지정된 경로의 HTML 페이지를 불러 옵니다.<br>
+                data-filter 값을 지정하면, 불러온 html페이지 안에서 해당 ID값을 가진 요소만 찾아 불러 옵니다.<br>
+                cafe24 혹은 그 외 다른 솔루션의 경우, 모든 페이지에 기본적으로 html 헤더 정보가 포함 되므로 가급적 filter를 지정하여 사용하세요.<br>
+                최대 2초동안 로딩을 시도 합니다.<br>
+                한 번만 실행 됩니다.
+            </p>
+            <ul class="required">
+                <li>data-url <em>HTML 경로</em></li>
+            </ul>
+            <ul class="option">
+                <li class="recommend">data-filter <em>불러온 HTML페이지 안에서 가져올 요소 ID</em></li>
+            </ul>
+            <p class="more"><a href="#autoSetting">요소의 class 를 .html_lazy_load 로 지정하면 함수를 호출하지 않아도 자동적용 됩니다.</a></p>
+            <p class="more"><a href="#forceScrFx">스크롤 반응 없이 강제실행이 가능합니다.</a></p>
+            <p class="warn">PC로컬에서 페이지 실행 시 작동하지 않습니다.</p>
+        </div>
+        <div class="code">
+            <code class="css"></code>
+            <div class="html"><textarea readonly>
+<div class="html_lazy_load" data-url="./assets/html_lazy_load.html" data-filter="filter"></div>
+<div id="hll01" data-url="./assets/html_lazy_load.html" data-filter="filter"></div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('hll01','htmlLazyLoad');
+            </code>
+        </div>
+        <div class="demo">
+            <p>불러올 페이지</p>
+            <iframe src="./assets/html_lazy_load.html"></iframe>
+            <p>결과</p>
+            <div class="html_lazy_load" data-url="./assets/html_lazy_load.html" data-filter="filter"></div>
+        </div>
+    </div>
+
+    <div id="float">
+        <div class="desc">
+            <h2>float</h2>
+            <p>
+                해당 요소가 브라우저창의 최상단에 도달 시 .fixed 클래스를 추가하며,<br>
+                화면 위로 사라지면 추가로 .bottom 클래스를 추가합니다.<br>
+                CSS 내용에 따라 문서 최하단까지 특정 요소를 플로팅 시킬 수도, 일정 영역 안에서만 플로팅 시킬 수도 있습니다.<br>
+                GNB 등에 사용할 때 유용합니다.
+            </p>
+        </div>
+        <div class="code">
+            <code class="css">
+                #float01 { height:1000px; position:relative; margin-bottom:300px; }<br>
+                #float01 > div { width:300px; background-color:#eaeaea; height:300px; position:absolute; z-index:2; top:0; left:0; }<br>
+                #float01.fixed > div { position:fixed; left:21rem; }<br>
+                #float01.bottom > div { position:absolute; bottom:-300px; left:0; top:unset; }<br>
+                <br>
+                #gnb_wrap { height:100px; position:relative; }<br>
+                #gnb { height:100px; width: 100%; position:relative; top:0; left:0; z-index:99; background-color:#fff; }<br>
+                #gnb_wrap.fixed > #gnb { position:fixed; }
+            </code>
+            <div class="html"><textarea readonly>
+<div id="float01"><div></div></div>
+<div id="gnb_wrap">
+    <div id="gnb">....<div>
+</div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('float01','float');<br>
+                addScrFxItem('gnb_wrap','float');
+            </code>
+        </div>
+        <div class="demo">
+            <div id="float01"><div></div></div>
+        </div>
+    </div>
+
+    <div id="bga">
+        <div class="desc">
+            <h2>bga</h2>
+            <p>
+                적용한 요소의 첫번째 자식 요소 혹은 data-filter에 지정된 id값을 가진 요소를<br>
+                스크롤 위치에 따라 상하 애니메이션 시키며 패럴랙스 느낌의 효과를 냅니다.<br>
+                부모 요소의 height 값은 애니메이션 되는 자식 요소보다 작게 지정되어 있어야 하며,<br>
+                설정 오류 시 콘솔창에 경고가 뜨며 실행이 무시 됩니다.
+            </p>
+            <ul class="option">
+                <li>data-filter <em>애니메이션 시킬 자식요소 ID</em></li>
+            </ul>
+        </div>
+        <div class="code">
+            <code class="css">
+                #bga01 { position:relative; height:300px; width:100%; }<br>
+                #bga01 p { position:absolute; z-index:2; top:48%; left:0; width:100%; text-align:center; }<br>
+                #bga01 img { height:1000px; width:100%; object-fit:cover; }<br>
+                <br>
+                #bga02 { height:500px; width:100%; }
+            </code>
+            <div class="html"><textarea readonly>
+<div id="bga01" data-filter="bga01_bg">
+    <p>BGA</p>
+    <div id="bga01_bg"><img src="./assets/bga01.jpg" alt="배경이미지"></div>
+</div>
+<div id="bga02"><img src="./assets/bga02.jpg" alt="배경이미지"></div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('bga01','bga');
+                addScrFxItem('bga02','bga');
+            </code>
+        </div>
+        <div class="demo">
+            <div id="bga01" data-filter="bga01_bg">
+                <p>BGA</p>
+                <div id="bga01_bg"><img src="./assets/bga01.jpg" alt="배경이미지"></div>
+            </div>
+            <div id="bga02"><img src="./assets/bga02.jpg" alt="배경이미지"></div>
+        </div>
+    </div>
+
+    <div id="active">
+        <div class="desc">
+            <h2>active</h2>
+            <p>
+                스크롤이 일정 위치에 도달했을 때 적용한 요소에 .active 클래스를 추가합니다.
+            </p>
+            <ul class="option">
+                <li>data-norepeat="true" <em>한 번만 실행 시킴</em></li>
+            </ul>
+            <p class="more"><a href="#forceScrFx">스크롤 반응 없이 강제실행이 가능합니다.</a></p>
+        </div>
+        <div class="code">
+            <code class="css">
+                #active01, #active02 { scale:0.8; opacity:0.5; transition:1s; }<br>
+                #active01.active, #active02.active { scale:1; opacity:1; }
+            </code>
+            <div class="html"><textarea readonly>
+<div id="active01"></div>
+<div id="active02" data-norepeat="true"></div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('active01','active');
+                addScrFxItem('active02','active');
+            </code>
+        </div>
+        <div class="demo">
+            <div id="active01"></div>
+            <div id="active02" data-norepeat="true">no-repeat</div>
+        </div>
+    </div>
+
+    <div id="chainActive">
+        <div class="desc">
+            <h2>chainActive</h2>
+            <p>
+                스크롤이 일정 위치에 도달했을 때 적용한 요소의 자식 요소들에 순차적으로 .active 클래스를 추가합니다.
+            </p>
+            <ul class="option">
+                <li>data-filter <em>적용할 자식요소들의 class</em></li>
+                <li>data-speed <em>실행간격</em></li>
+                <li>data-norepeat="true" <em>한 번만 실행 시킴</em></li>
+            </ul>
+            <p class="more"><a href="#forceScrFx">스크롤 반응 없이 강제실행이 가능합니다.</a></p>
+        </div>
+        <div class="code">
+            <code class="css">
+                #chainActive01 > div { scale:0.8; opacity:0.5; transition:0.5s; }<br>
+                #chainActive01 > div.active { scale:1; opacity:1; }
+            </code>
+            <div class="html"><textarea readonly>
+<div id="chainActive01" data-speed="500">
+    <div>item1</div>
+    <div>item2</div>
+    <div>item3</div>
+</div>
+<div id="chainActive02" data-filter="fxitem">
+    <div class="fxitem">item1</div>
+    <div>item2</div>
+    <div class="fxitem">item3</div>
+</div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('chainActive01','chainActive');<br>
+                addScrFxItem('chainActive02','chainActive');
+            </code>
+        </div>
+        <div class="demo">
+            <div id="chainActive01" data-speed="500">
+                <div>item1</div>
+                <div>item2</div>
+                <div>item3</div>
+            </div>
+            <div id="chainActive02" data-filter="fxitem">
+                <div class="fxitem">item1</div>
+                <div>item2</div>
+                <div class="fxitem">item3</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="counter">
+        <div class="desc">
+            <h2>counter</h2>
+            <p>
+                적용 요소 안에서 data-num 속성을 가진 하위 요소들을 모두 찾아<br>
+                스크롤이 일정 위치에 도달했을 때 0부터 data-num 값에 입력된 숫자까지 카운트업 시킵니다.
+            </p>
+            <ul class="required">
+                <li>data-num <em>소수점 포함 숫자만 가능</em></li>
+            </ul>
+            <ul class="option">
+                <li>data-speed <em>실행속도, 크게 설정할수록 느립니다.</em></li>
+            </ul>
+            <p class="more"><a href="#forceScrFx">스크롤 반응 없이 강제실행이 가능합니다.</a></p>
+        </div>
+        <div class="code">
+            <div class="html"><textarea readonly>
+<div id="counter01">
+    <div data-num="10.5"></div>
+    <div data-num="12345"></div>
+    <div data-num="9999.99"></div>
+</div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('counter01','counter');
+            </code>
+        </div>
+        <div class="demo">
+            <div id="counter01" data-norepeat="true">
+                <div data-num="10.5"></div>
+                <div data-num="12345"></div>
+                <div data-num="9999.99"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="typewrite">
+        <div class="desc">
+            <h2>typewrite</h2>
+            <p>
+                스크롤이 일정 위치에 도달했을 때<br>
+                지정된 data-str 값, 혹은 값이 지정되어 있지 않다면 요소 내의 문자열을 한 글자씩 뿌려 줍니다.
+            </p>
+            <ul class="option">
+                <li>data-str <em>뿌려줄 문자열</em></li>
+                <li>data-norepeat="true" <em>한 번만 실행 시킴</em></li>
+            </ul>
+            <p class="more"><a href="#forceScrFx">스크롤 반응 없이 강제실행이 가능합니다.</a></p>
+        </div>
+        <div class="code">
+            <div class="html"><textarea readonly>
+<div id="typewrite01" data-str="t y p e w r i t e"></div>
+<div id="typewrite02" data-norepeat="true">
+    타 자 기<br>
+    효과
+</div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('typewrite01','typewrite');
+                addScrFxItem('typewrite02','typewrite');
+            </code>
+        </div>
+        <div class="demo">
+            <div id="typewrite01" data-str="t y p e w r i t e"></div>
+            <div id="typewrite02" data-norepeat="true">
+                타 자 기<br>
+                효과
+            </div>
+        </div>
+    </div>
+
+    <div id="marquee">
+        <div class="desc">
+            <h2>marquee</h2>
+            <p>
+                스크롤이 일정 위치에 도달했을 때 자식요소들을 왼쪽 방향으로 끊임없이 횡스크롤 시킵니다.
+            </p>
+            <ul class="option">
+                <li>data-speed <em>큰 숫자를 지정할 수록 빠르게 이동합니다.</em></li>
+            </ul>
+        </div>
+        <div class="code">
+            <code class="css">
+                #marquee01 { height: 100px; }
+            </code>
+            <div class="html"><textarea readonly>
+<div id="marquee01">
+    <span>marquee</span>
+</div>
+<div id="marquee02" data-speed="200">
+    <span>marquee speed fast</span>
+</div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('marquee01','marquee');
+                addScrFxItem('marquee02','marquee');
+            </code>
+        </div>
+        <div class="demo">
+            <div id="marquee01">
+                <span> marquee </span>
+            </div>
+            <div id="marquee02" data-speed="200">
+                <span> marquee speed fast </span>
+            </div>
+        </div>
+    </div>
+
+    <div id="bounce">
+        <div class="desc">
+            <h2>bounce</h2>
+            <p>
+                스크롤이 일정 위치에 도달했을 때 해당 요소에 통통 튀는 효과를 줍니다.
+            </p>
+        </div>
+        <div class="code">
+            <div class="html"><textarea readonly>
+<div id="bounce01"></div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('bounce01','bounce');
+            </code>
+        </div>
+        <div class="demo">
+            <div id="bounce01">bounce</div>
+        </div>
+    </div>
+
+    <div id="paused">
+        <div class="desc">
+            <h2>paused</h2>
+            <p>
+                스크롤이 멈춘 후 1초 후에 해당 요소에 .active 클래스를 추가합니다.<br>
+                스크롤이 시작되면 active 클래스를 제거 합니다.<br>
+            </p>
+        </div>
+        <div class="code">
+            <code class="css">
+                #paused01 { opacity: 0; transition: 0.5s; }
+                #paused01.active { opacity:1; }
+            </code>
+            <div class="html"><textarea readonly>
+<div id="paused01">paused</div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('paused01','paused');
+            </code>
+        </div>
+        <div class="demo">
+            <div id="paused01">paused</div>
+            <div id="paused02">scroll paused</div>
+        </div>
+    </div>
+
+    <div id="fadeIn">
+        <div class="desc">
+            <h2>fadeIn</h2>
+            <p>
+                스크롤 위치에 따라 적용 엘리먼트의 투명도를 조절합니다.<br>
+                스크롤 위치가 아래로 내려갈 수록 불투명해 집니다.
+            </p>
+        </div>
+        <div class="code">
+            <div class="html"><textarea readonly>
+<div id="fadein01"></div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('fadein01','fadeIn');
+            </code>
+        </div>
+        <div class="demo">
+            <div id="fadein01"></div>
+        </div>
+    </div>
+
+    <div id="fadeOut">
+        <div class="desc">
+            <h2>fadeOut</h2>
+            <p>
+                스크롤 위치에 따라 적용 엘리먼트의 투명도를 조절합니다.<br>
+                스크롤 위치가 아래로 내려갈 수록 투명해 집니다.
+            </p>
+        </div>
+        <div class="code">
+            <div class="html"><textarea readonly>
+<div id="fadeout01"></div>
+            </textarea></div>
+            <code class="js">
+                addScrFxItem('fadeout01','fadeOut');
+            </code>
+        </div>
+        <div class="demo">
+            <div id="fadeout01"></div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div id="autoSetting">
+        <div class="desc">
+            <h2>자동적용</h2>
+            <p>
+                태그의 class를 아래와 같은 특정값으로 지정 시 addScrFxItem() 함수를 호출하지 않아도 자동으로 적용 됩니다.<br>
+                .media_auto_play : mediaAutoPlay<br>
+                .img_lazy_load : imgLazyLoad<br>
+                .html_lazy_load : htmlLazyLoad<br>
+                적용되는 클래스 이름들은 초기값이며, 아래와 같은 스크립트를 삽입하면 클래스 이름을 변경할 수 있습니다.
+            </p>
+        </div>
+        <div class="code">
+            <code class="js">
+                window.addEventListener('load',()=>{<br>
+                <em></em>scrFX.autoLoadSelector.mediaAutoPlay = <strong>'.myClass'</strong>;<br>
+                <em></em>scrFX.autoLoadSelector.imgLazyLoad = <strong>'.myClass'</strong>;<br>
+                <em></em>scrFX.autoLoadSelector.htmlLazyLoad = <strong>'.myClass'</strong>;<br>
+                });<br>
+            </code>
+        </div>
+    </div>
+
+    <div id="forceScrFx">
+        <div class="desc">
+            <h2>강제호출</h2>
+            <p>
+                스크롤 위치에 상관 없이 몇몇 이펙트들을 강제로 불러올 수 있습니다.<br>
+                forceScrFx('엘리먼트ID','이펙트') 함수로 사용할 수 있습니다.<br>
+                강제실행 시킨 효과는 스크롤에 반응하지 않고 한 번만 동작 합니다.
+            </p>
+        </div>
+        <div class="code">
+            <div class="html">
+                <textarea readonly>
+<div>
+    <button onclick="forceScrFx('force-active','active');return;">active 실행</button>
+    <div id="force-active"></div>
+</div>
+                </textarea>
+            </div>
+        </div>
+        <div class="demo">
+            <div>
+                <button onclick="forceScrFx('force-imgLazyLoad','imgLazyLoad');return;">imgLazyLoad 실행</button>
+                <div id="force-imgLazyLoad" data-url="./assets/img_lazy_load.jpg"></div>
+            </div>
+            <div>
+                <button onclick="forceScrFx('force-htmlLazyLoad','htmlLazyLoad');return;">htmlLazyLoad 실행</button>
+                <div id="force-htmlLazyLoad" data-url="./assets/html_lazy_load.html" data-filter="filter"></div>
+            </div>
+            <div>
+                <button onclick="forceScrFx('force-active','active');return;">active 실행</button>
+                <div id="force-active"></div>
+            </div>
+            <div>
+                <button onclick="forceScrFx('force-chainActive','chainActive');return;">chainActive 실행</button>
+                <div id="force-chainActive">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div>
+                <button onclick="forceScrFx('force-counter','counter');return;">counter 실행</button>
+                <div id="force-counter">
+                    <span data-num="99999">0</span>
+                </div>
+            </div>
+            <div>
+                <button onclick="forceScrFx('force-typewrite','typewrite');return;">typewrite 실행</button>
+                <div id="force-typewrite" data-str="typewrite 실행"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="helpMode">
+        <div class="desc">
+            <h2>도움말 모드</h2>
+            <p>
+                아래와 같이 도움말모드를 활성화 하면, 호출한 이펙트에 대한 간략한 설명을 콘솔창에 출력 합니다.<br>
+                활성화 하지 않아도 오류 발생 시 해당 이펙트에 대한 도움말이 출력 됩니다.<br>
+                <img src="./assets/console.gif" alt="콘솔 도움말">
+            </p>
+        </div>
+        <div class="code">
+            <code class="js">
+                window.addEventListener('load',()=>{<br>
+                <em></em>scrFX.helpMode = <strong>true</strong>;<br>
+                });<br>
+            </code>
+        </div>
+    </div>
+
+    <div id="mediaTrySetting">
+        <div class="desc">
+            <h2>동영상 불러오기 설정</h2>
+            <p>
+                기본적으로 0.5초 간격으로 4번 로딩을 시도하며 로딩불가시 콘솔창에 메세지와 함께 동영상 로딩을 포기 합니다.<br>
+                로딩시도회수 설정값은 아래와 같이 변경할 수 있습니다.
+            </p>
+        </div>
+        <div class="code">
+            <code class="js">
+                window.addEventListener('load',()=>{<br>
+                <em></em>scrFX.mediaLoadTryMax = <strong>5</strong>;<br>
+                });<br>
+            </code>
+        </div>
+    </div>
+
+    <div id="pageMonitor">
+        <div class="desc">
+            <h2>페이지 길이 변경 감시</h2>
+            <p>
+                임대형 쇼핑몰 솔루션의 경우 의도치 않게 페이지 길이의 변화가 강제되는 경우가 종종 있습니다.<br>
+                이로 인해 스크롤 반응 위치가 어긋날 수 있는데, 변화가 심해 오류가 자주 일어나는 페이지의 경우<br>
+                아래와 같이 설정값을 넣어 주기적으로 페이지 변화를 관찰하며 스크롤 반응 위치를 보정 합니다.<br>
+                되도록 사용하지 않는 편이 좋습니다.
+            </p>
+        </div>
+        <div class="code">
+            <code class="js">
+                window.addEventListener('load',()=>{<br>
+                <em></em>scrFX.monitor = <strong>true</strong>;<br>
+                });<br>
+            </code>
+        </div>
+    </div>
+
+    <hr>
+
+    <div id="slickPause">
+        <div class="desc">
+            <h2>슬릭 슬라이드 자동 제어</h2>
+            <p>
+                슬라이드로 많이 사용하시는 jQuery플러그인 슬릭 슬라이드가 화면 밖으로 밀려날 시 자동으로 슬라이드를 멈춰주는 기능 입니다.<br>
+                슬릭 슬라이드는 화면 밖에서도 계속 동작하기 때문에 성능 저하의 원인이 됩니다.<br>
+                함수 호출 필요 없이 단순히 이 <strong style="color:#0f6299;">slickAutoPause.js</strong> 파일을 불러오는 것 만으로 적용 됩니다.<br>
+                jQuery, slick플러그인과 함께 사용해야 합니다.<br>
+                <strong style="color:#bf100d;">jQuery 3.x 버전과 호환 불가</strong>
+            </p>
+        </div>
+        <div class="code">
+            <div class="html">
+                <textarea readonly>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" crossorigin="anonymous"></script>
+<script>const $ = jQuery.noConflict();</script>
+<script type="text/javascript" src="./slick.min.js"></script>
+<script type="text/javascript" src="./slickAutoPause.js"></script>
+                </textarea>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script>
+window.addEventListener('load',()=> {
+    addScrFxItem('media01', 'mediaAutoPlay');
+    addScrFxItem('ill01','imgLazyLoad');
+    addScrFxItem('float01','float');
+    addScrFxItem('bga01','bga');
+    addScrFxItem('bga02','bga');
+    addScrFxItem('active01','active');
+    addScrFxItem('active02','active');
+    addScrFxItem('chainActive01','chainActive');
+    addScrFxItem('chainActive02','chainActive');
+    addScrFxItem('counter01','counter');
+    addScrFxItem('typewrite01','typewrite');
+    addScrFxItem('typewrite02','typewrite');
+    addScrFxItem('marquee01','marquee');
+    addScrFxItem('marquee02','marquee');
+    addScrFxItem('bounce01','bounce');
+    addScrFxItem('paused01','paused');
+    addScrFxItem('paused02','paused');
+    addScrFxItem('fadein01','fadeIn');
+    addScrFxItem('fadeout01','fadeOut');
+});
+//scrFX.helpMode = true;
+</script>
+
+</body>
+</html>
