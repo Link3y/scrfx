@@ -3,7 +3,6 @@ class scrollFxLK {
     /**
     v1.1.1
     2023.06 Lin.K (tabooo@naver.com, nihilin@gmail.com)
-    권리자 외 복제 금지 / 클래스 내부 내용 임의변경시 사후지원,대응 불가
     **/
 
     constructor(objs={}) {
