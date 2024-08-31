@@ -5,7 +5,11 @@ class scrollFxLK {
     2023.06 Lin.K (tabooo@naver.com, nihilin@gmail.com)
     **/
 
+    static instance;
+
     constructor(objs={}) {
+        if (scrollFxLK.instance) return scrollFxLK.instance;
+        
         this.objs = objs;
         this.autoLoadSelector = {
             mediaAutoPlay : '.media_auto_play',
@@ -15,6 +19,8 @@ class scrollFxLK {
         this.mediaLoadTryMax = 4;
         this.monitor = false;
         this.helpMode = false;
+
+        scrollFxLK.instance = this;
     }
 
     fxItems = {};
